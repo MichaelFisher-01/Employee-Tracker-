@@ -63,15 +63,41 @@ startPrompt = () => {
 
 const viewAllDepartments = () => {
 	console.log('You have selected to view all departments. ----------');
-	inquirer.prompt();
+	db.query(`SELECT * FROM department`, (err, allDepartments) => {
+		if (err) {
+			console.log(err.sqlMessage);
+			console.log(`Error Code: ${err.errno}`);
+		} else {
+			console.table(allDepartments);
+			startPrompt();
+		}
+	});
 };
 
 const viewAllRoles = () => {
 	console.log('You have selected to view all roles. ----------');
+	db.query(`SELECT * FROM roles`, (err, allRoles) => {
+		if (err) {
+			console.log(err.sqlMessage);
+			console.log(`Error Code: ${err.errno}`);
+		} else {
+			console.table(allRoles);
+			startPrompt();
+		}
+	});
 };
 
 const viewAllEmployees = () => {
 	console.log('You have selected to view all employees. ----------');
+	db.query(`SELECT * FROM employee`, (err, allEmployees) => {
+		if (err) {
+			console.log(err.sqlMessage);
+			console.log(`Error Code: ${err.errno}`);
+		} else {
+			console.table(allEmployees);
+			startPrompt();
+		}
+	});
 };
 
 const addADepartment = async () => {
