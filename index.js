@@ -112,7 +112,7 @@ const addARole = async () => {
 			name: 'salary',
 		},
 		{
-			message: 'What is the department id for this role?',
+			message: 'What department id is thie role under?',
 			type: 'text',
 			name: 'department_id',
 		},
@@ -135,7 +135,7 @@ const addAnEmployee = async () => {
 			name: 'last_name',
 		},
 		{
-			message: "What is this employee's role id?",
+			message: "What role id matches this employee's role?",
 			type: 'text',
 			name: 'roles_id',
 		},
@@ -155,7 +155,7 @@ const addAnEmployee = async () => {
 			],
 		},
 		{
-			message: "What is this employee's manager id?",
+			message: "What is this employee's manager's id?",
 			type: 'number',
 			name: 'manager_id',
 			when(answers) {
@@ -167,8 +167,36 @@ const addAnEmployee = async () => {
 	sendToDatabase(answers, databaseName);
 };
 
-const updatedAnEmployeeRole = () => {
+const updateAnEmployeeRole = () => {
 	console.log('You have selected to update an employee role. ----------');
+	inquirer
+		.prompt([
+			{
+				message: 'What is the id of the employee we need to update?',
+				type: 'input',
+				name: 'id',
+			},
+			{
+				message: "What is this employee's new role id?",
+				type: 'input',
+				name: 'roles_id',
+			},
+		])
+		.then((answers) => {
+			db.query(
+				`UPDATE employee SET ? WHERE id = ${answers.id}`,
+				answers,
+				(err) => {
+					if (err) {
+						console.log(err.sqlMessage);
+						console.log(`Error Code: ${err.errno}`);
+						startPrompt();
+					} else {
+						console.log('Successfully Updated Employee');
+					}
+				}
+			);
+		});
 };
 
 const functionList = {
@@ -178,7 +206,7 @@ const functionList = {
 	addADepartment,
 	addARole,
 	addAnEmployee,
-	updatedAnEmployeeRole,
+	updateAnEmployeeRole,
 };
 
 const sendToDatabase = (data, dbName) => {
