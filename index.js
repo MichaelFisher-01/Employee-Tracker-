@@ -98,7 +98,8 @@ const viewAllEmployees = () => {
 	console.log('You have selected to view all employees. ----------');
 	db.query(`SELECT e.first_name, e.last_name, title, dept_name, salary,CONCAT(m.first_name, ' ', m.last_name) AS manager
 			FROM departments, roles, employees e
-			LEFT JOIN employees m ON e.manager_id = m.id
+			LEFT JOIN employees m 
+			ON e.manager_id = m.id
 			WHERE e.roles_id = roles.id AND departments.id = roles.department_id
 			ORDER BY e.id`, (err, allEmployees) => {
 		if (err) {
