@@ -1,17 +1,16 @@
-const inquirer = require('inquirer');
-const mysql = require('mysql2');
+import inquirer from 'inquirer';
+import mysql from 'mysql2';
 // Connect to the database so we can send and receive information.
 const db = mysql.createConnection({
 	host: 'localhost',
 	database: 'CMS_db',
 	user: 'root',
-	password: 'S1lv3rQu1ck!',
+	password: 'sup4,X,s3qu3l',
 });
 
 // List of options to give to the user at the start then after every function.
-startPrompt = () => {
-	inquirer
-		.prompt([
+const startPrompt = async () => {
+ await inquirer.prompt([
 			{
 				message: 'Please Select an option from below',
 				type: 'list',
@@ -26,7 +25,7 @@ startPrompt = () => {
 						value: 'viewAllRoles',
 					},
 					{
-						name: 'View All Employees',
+						name: 'View All Employees', 
 						value: 'viewAllEmployees',
 					},
 					{
@@ -66,7 +65,7 @@ startPrompt = () => {
 const viewAllDepartments = () => {
 	console.log('You have selected to view all departments. ----------');
 	//Connect to the database then pull all from departments
-	db.query(`SELECT * FROM department`, (err, allDepartments) => {
+	db.query(`SELECT * FROM departments`, (err, allDepartments) => {
 		if (err) {
 			console.log(err.sqlMessage);
 			console.log(`Error Code: ${err.errno}`);
@@ -80,7 +79,9 @@ const viewAllDepartments = () => {
 
 const viewAllRoles = () => {
 	console.log('You have selected to view all roles. ----------');
-	db.query(`SELECT * FROM roles`, (err, allRoles) => {
+	db.query(`SELECT title, salary, dept_name
+				FROM departments, roles
+				WHERE departments.id = roles.department_id`, (err, allRoles) => {
 		if (err) {
 			console.log(err.sqlMessage);
 			console.log(`Error Code: ${err.errno}`);
@@ -90,10 +91,11 @@ const viewAllRoles = () => {
 		}
 	});
 };
-
 const viewAllEmployees = () => {
 	console.log('You have selected to view all employees. ----------');
-	db.query(`SELECT * FROM employee`, (err, allEmployees) => {
+	db.query(`SELECT first_name, last_name, dept_name, salary, first_name
+			FROM departments, roles, employees
+			WHERE employee.roles_id = roles.id AND departments.id = roles.department_id`, (err, allEmployees) => {
 		if (err) {
 			console.log(err.sqlMessage);
 			console.log(`Error Code: ${err.errno}`);
@@ -108,7 +110,7 @@ const viewAllEmployees = () => {
 const addADepartment = async () => {
 	console.log('You have selected to add a department. ----------');
 	//Gives the value for which table we are going to update then passes it to the sendToDatabase function.
-	let deptDatabase = 'department';
+	let deptDatabase = 'departments';
 	let answers = await inquirer.prompt([
 		{
 			message: 'What is the department id?',
@@ -155,7 +157,7 @@ const addARole = async () => {
 
 const addAnEmployee = async () => {
 	console.log('You have selected to add an employee. ----------');
-	let databaseName = 'employee';
+	let databaseName = 'employees';
 	let answers = await inquirer.prompt([
 		{
 			message: "What is this employee's first name?",
