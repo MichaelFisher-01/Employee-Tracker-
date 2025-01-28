@@ -25,6 +25,6 @@ VALUES ("Robert", "California", 3, NULL),
     ("Gabe", "Lewis", 8, 1),
     ("Kelly", "Kapoor", 5, 2),
     ("Ryan", "Howard", 6, 2),
-    ("Kevin", "Malone", 7, 1),
+    ("Kevin", "Malone", 7, 2),
     ("Sadiq", "Last-Name", 1, 2),
     ("Nick", "Last-Name", 2, 2);

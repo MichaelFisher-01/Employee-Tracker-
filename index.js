@@ -1,11 +1,14 @@
 import inquirer from 'inquirer';
 import mysql from 'mysql2';
+import dotenv from 'dotenv';
+
+dotenv.config();
 // Connect to the database so we can send and receive information.
 const db = mysql.createConnection({
 	host: 'localhost',
 	database: 'CMS_db',
-	user: 'root',
-	password: 'sup4,X,s3qu3l',
+	user: `${process.env.user}`,
+	password: `${process.env.password}`,
 });
 
 // List of options to give to the user at the start then after every function.
@@ -93,9 +96,11 @@ const viewAllRoles = () => {
 };
 const viewAllEmployees = () => {
 	console.log('You have selected to view all employees. ----------');
-	db.query(`SELECT first_name, last_name, dept_name, salary, first_name
-			FROM departments, roles, employees
-			WHERE employee.roles_id = roles.id AND departments.id = roles.department_id`, (err, allEmployees) => {
+	db.query(`SELECT e.first_name, e.last_name, title, dept_name, salary,CONCAT(m.first_name, ' ', m.last_name) AS manager
+			FROM departments, roles, employees e
+			LEFT JOIN employees m ON e.manager_id = m.id
+			WHERE e.roles_id = roles.id AND departments.id = roles.department_id
+			ORDER BY e.id`, (err, allEmployees) => {
 		if (err) {
 			console.log(err.sqlMessage);
 			console.log(`Error Code: ${err.errno}`);
@@ -220,7 +225,7 @@ const updateAnEmployeeRole = () => {
 		.then((answers) => {
 			//Connects to the database then picks which value to update based off the id
 			db.query(
-				`UPDATE employee SET ? WHERE id = ${answers.id}`,
+				`UPDATE employees SET ? WHERE id = ${answers.id}`,
 				answers,
 				(err) => {
 					if (err) {
