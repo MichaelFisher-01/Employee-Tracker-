@@ -19,7 +19,7 @@ You will be able to view the current employees in your data base and then add ne
 
 ## Video
 Here is a video of the process if you do not wish to donwlaod and try for yourself.
-
+(https://drive.google.com/file/d/1rMRIiev-oJA1QExnThq2OXWVCoqT0PZ6/view?usp=sharing)
 
 ## Questions
 If you have questions you can contact me at:
